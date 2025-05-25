@@ -25,7 +25,6 @@ export const GET = async (req: Request) => {
     }
 
     const data = await apiResponse.json();
-    console.log("calling backend")
 
     return new Response(JSON.stringify(data), {
       status: 200,

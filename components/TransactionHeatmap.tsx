@@ -73,6 +73,25 @@ export default function TransactionHeatmap({ transactions }: HeatmapProps) {
 
   const maxCount = Math.max(...heatmapData.map((d) => d.count), 1)
 
+  const totalFeesLamports = transactions.reduce((sum, tx) => {
+  // guard against missing meta
+  const fee = tx.raw_transaction?.meta?.fee ?? 0;
+  return sum + fee;
+}, 0);
+const totalFeesSOL = (totalFeesLamports / 1e9).toFixed(4);
+
+// 2. Compute today’s fees in SOL:
+const todayKey = new Date().toISOString().split("T")[0];
+const todayFeesLamports = transactions
+  .filter((tx) => {
+    const dateKey = new Date(tx.block_time / 1000)
+      .toISOString()
+      .split("T")[0];
+    return dateKey === todayKey;
+  })
+  .reduce((sum, tx) => sum + (tx.raw_transaction?.meta?.fee ?? 0), 0);
+const todayFeesSOL = (todayFeesLamports / 1e9).toFixed(4);
+
   const getIntensity = (count: number) => {
     if (count === 0) return 0
     if (count === 1) return 1
@@ -84,10 +103,10 @@ export default function TransactionHeatmap({ transactions }: HeatmapProps) {
   const getColorClass = (intensity: number) => {
     const base = [
       "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-700",
-      "bg-emerald-200 dark:bg-emerald-700 hover:bg-emerald-300 dark:hover:bg-emerald-600 border-emerald-300 dark:border-emerald-600",
-      "bg-emerald-400 dark:bg-emerald-600 hover:bg-emerald-500 dark:hover:bg-emerald-500 border-emerald-500 dark:border-emerald-500",
-      "bg-emerald-600 dark:bg-emerald-500 hover:bg-emerald-700 dark:hover:bg-emerald-400 border-emerald-700 dark:border-emerald-400",
-      "bg-emerald-800 dark:bg-emerald-400 hover:bg-emerald-900 dark:hover:bg-emerald-300 border-emerald-900 dark:border-emerald-300",
+      "bg-emerald-200 dark:bg-emerald-200 hover:bg-emerald-300 dark:hover:bg-emerald-300 border-emerald-300 dark:border-emerald-600",
+      "bg-emerald-400 dark:bg-emerald-400 hover:bg-emerald-500 dark:hover:bg-emerald-500 border-emerald-500 dark:border-emerald-500",
+      "bg-emerald-600 dark:bg-emerald-600 hover:bg-emerald-700 dark:hover:bg-emerald-700 border-emerald-700 dark:border-emerald-700",
+      "bg-emerald-800 dark:bg-emerald-800 hover:bg-emerald-900 dark:hover:bg-emerald-900 border-emerald-900 dark:border-emerald-300",
     ]
     return base[intensity] || base[0]
   }
@@ -259,58 +278,58 @@ export default function TransactionHeatmap({ transactions }: HeatmapProps) {
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[
-            {
-              label: "Total Transactions",
-              value: transactions.length.toLocaleString(),
-              color: "text-purple-600 dark:text-purple-400",
-            },
-            {
-              label: "Active Days",
-              value: heatmapData.filter((d) => d.count > 0).length,
-              color: "text-emerald-600 dark:text-emerald-400",
-            },
-            {
-              label: "Busiest Day",
-              value: Math.max(...heatmapData.map((d) => d.count)),
-              color: "text-blue-600 dark:text-blue-400",
-            },
-            {
-              label: "Daily Average",
-              value: transactions.length > 0 ? (transactions.length / 365).toFixed(1) : "0.0",
-              color: "text-orange-600 dark:text-orange-400",
-            },
-          ].map((stat, i) => (
-            <div
-              key={i}
-              className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 text-center"
-            >
-              <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">{stat.label}</div>
-            </div>
-          ))}
-        </div>
+       {/* Summary Cards */}
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+  {[
+    {
+      label: "Total Transactions",
+      value: transactions.length.toLocaleString(),
+      color: "text-purple-600 dark:text-purple-400",
+    },
+    {
+      label: "Active Days",
+      value: heatmapData.filter((d) => d.count > 0).length,
+      color: "text-emerald-600 dark:text-emerald-400",
+    },
+    {
+      label: "Busiest Day",
+      value: Math.max(...heatmapData.map((d) => d.count)),
+      color: "text-blue-600 dark:text-blue-400",
+    },
+    {
+      label: "Daily Average",
+      value:
+        transactions.length > 0
+          ? (transactions.length / 365).toFixed(1)
+          : "0.0",
+      color: "text-orange-600 dark:text-orange-400",
+    },
+    {
+      label: "Total Fees (SOL)",
+      value: `${totalFeesSOL}`,
+      color: "text-pink-600 dark:text-pink-400",
+    },
+    {
+      label: "Today's Fees (SOL)",
+      value: `${todayFeesSOL}`,
+      color: "text-pink-500 dark:text-pink-300",
+    },
+  ].map((stat, i) => (
+    <div
+      key={i}
+      className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 text-center"
+    >
+      <div className={`text-2xl font-bold ${stat.color}`}>
+        {stat.value}
+      </div>
+      <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+        {stat.label}
+      </div>
+    </div>
+  ))}
+</div>
 
-        {/* Activity Summary */}
-        {transactions.length > 0 && (
-          <div className="bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-gray-800 dark:to-gray-900 rounded-lg border border-emerald-200 dark:border-emerald-700 p-4">
-            <div className="flex items-center justify-between flex-wrap gap-2">
-              <div>
-                <h3 className="font-semibold text-gray-800 dark:text-gray-200">Activity Summary</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  Most active period: {Math.max(...heatmapData.map((d) => d.count))} transactions in a single day
-                </p>
-              </div>
-              <div className="text-right">
-                <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400">
-                  {((heatmapData.filter((d) => d.count > 0).length / 365) * 100).toFixed(1)}%
-                </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Year Coverage</div>
-              </div>
-            </div>
-          </div>
-        )}
+
       </div>
     </TooltipProvider>
   )
