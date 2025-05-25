@@ -7,13 +7,18 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { GlowingEffect } from "@/components/ui/glowing-effect";
+
 
 interface Transaction {
   address: string
   block_time: number
   chain: string
   block_slot: number
-  raw_transaction: object
+  raw_transaction?: {
+    meta?: {
+      fee?: number;
+    };}
 }
 
 interface HeatmapProps {
@@ -27,6 +32,12 @@ interface DayData {
   dayOfWeek: number
   weekIndex: number
 }
+
+ interface MonthLabel {
+  month: string;
+  weekIndex: number;
+}
+
 
 export default function TransactionHeatmap({ transactions }: HeatmapProps) {
   const [hoveredDay, setHoveredDay] = useState<DayData | null>(null)
@@ -125,7 +136,7 @@ const todayFeesSOL = (todayFeesLamports / 1e9).toFixed(4);
       minute: "2-digit",
     })
 
-  const weeks = []
+  const weeks:DayData[][] = []
   for (let weekIndex = 0; weekIndex < 53; weekIndex++) {
     const weekDays = heatmapData.filter((day) => day.weekIndex === weekIndex)
     weeks.push(weekDays)
@@ -134,7 +145,7 @@ const todayFeesSOL = (todayFeesLamports / 1e9).toFixed(4);
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
-  const monthLabels = []
+const monthLabels: MonthLabel[] = []
   let currentMonth = -1
   weeks.forEach((week, weekIndex) => {
     if (week.length > 0) {
@@ -176,7 +187,7 @@ const todayFeesSOL = (todayFeesLamports / 1e9).toFixed(4);
 
         <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-gray-900 overflow-x-auto">
           <div className="min-w-[768px]">
-            <div className="flex mb-6 pb-2">
+            <div className="flex mb-6 ">
               <div className="w-8 flex-shrink-0"></div>
               <div className="w-full relative">
                 {monthLabels.map((label, index) => (
@@ -277,8 +288,7 @@ const todayFeesSOL = (todayFeesLamports / 1e9).toFixed(4);
           </div>
         </div>
 
-        {/* Summary Cards */}
-       {/* Summary Cards */}
+       
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
   {[
     {
@@ -315,8 +325,9 @@ const todayFeesSOL = (todayFeesLamports / 1e9).toFixed(4);
       color: "text-pink-500 dark:text-pink-300",
     },
   ].map((stat, i) => (
+    <div key={i} className="relative">
+      <GlowingEffect glow={true} spread={32} disabled={false} blur={8} />
     <div
-      key={i}
       className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 text-center"
     >
       <div className={`text-2xl font-bold ${stat.color}`}>
@@ -325,6 +336,7 @@ const todayFeesSOL = (todayFeesLamports / 1e9).toFixed(4);
       <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">
         {stat.label}
       </div>
+    </div>
     </div>
   ))}
 </div>
