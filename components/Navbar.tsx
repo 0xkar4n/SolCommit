@@ -3,6 +3,7 @@
 
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
+import { Activity } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -11,8 +12,11 @@ export default function Navbar() {
     <nav className="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-gray-700 bg-white/95 dark:bg-gray-900/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-gray-900/60">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
-          <div>
-            <Image src="/SolCommit.png" alt="SolCommit" width="150" height="150" />
+          {/* <div>
+            <Image src="/SolCommitLogo.png" alt="SolCommit" width="70" height="70" />
+          </div> */}
+          <div className="p-2 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl shadow-lg">
+                <Activity className="h-8 w-8 text-white" />
           </div>
           <div className="flex items-center space-x-4">
             <ThemeToggle />

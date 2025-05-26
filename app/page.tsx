@@ -113,14 +113,14 @@ export default function SolanaHeatmapPage() {
       <div className="container mx-auto px-4 py-8 max-w-7xl">
        <div className="text-center space-y-4 mb-8">
   <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-    <div className="p-3 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl shadow-lg">
+    {/* <div className="p-3 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl shadow-lg">
       <Activity className="h-8 w-8 text-white" />
-    </div>
-    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+    </div> */}
+    <h1 className="text-4xl md:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
       Solana Transaction Heatmap
     </h1>
   </div>
-  <p className="text-gray-600 dark:text-gray-300 max-w-md sm:max-w-3xl mx-auto text-base sm:text-lg leading-relaxed">
+  <p className="text-neutral-600 dark:text-neutral-300 max-w-md sm:max-w-3xl mx-auto text-base sm:text-lg leading-relaxed">
     Visualize Solana transaction activity over time with an interactive heatmap. Track daily transaction
     patterns and discover activity trends similar to GitHub's contribution graph.
   </p>

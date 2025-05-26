@@ -103,6 +103,15 @@ const todayFeesLamports = transactions
   .reduce((sum, tx) => sum + (tx.raw_transaction?.meta?.fee ?? 0), 0);
 const todayFeesSOL = (todayFeesLamports / 1e9).toFixed(4);
 
+const oneYearAgo = new Date();
+oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+
+const totalYearTransactions = transactions.filter((tx) => {
+  const txDate = new Date(tx.block_time / 1000);
+  return txDate >= oneYearAgo;
+}).length;
+
+
   const getIntensity = (count: number) => {
     if (count === 0) return 0
     if (count === 1) return 1
@@ -117,7 +126,7 @@ const todayFeesSOL = (todayFeesLamports / 1e9).toFixed(4);
       "bg-emerald-200 dark:bg-emerald-200 hover:bg-emerald-300 dark:hover:bg-emerald-300 border-emerald-300 dark:border-emerald-600",
       "bg-emerald-400 dark:bg-emerald-400 hover:bg-emerald-500 dark:hover:bg-emerald-500 border-emerald-500 dark:border-emerald-500",
       "bg-emerald-600 dark:bg-emerald-600 hover:bg-emerald-700 dark:hover:bg-emerald-700 border-emerald-700 dark:border-emerald-700",
-      "bg-emerald-800 dark:bg-emerald-800 hover:bg-emerald-900 dark:hover:bg-emerald-900 border-emerald-900 dark:border-emerald-300",
+      "bg-emerald-800 dark:bg-emerald-800 hover:bg-emerald-900 dark:hover:bg-emerald-900 border-emerald-900 dark:border-emerald-900",
     ]
     return base[intensity] || base[0]
   }
@@ -248,7 +257,7 @@ const monthLabels: MonthLabel[] = []
                           </TooltipTrigger>
                           <TooltipContent side="top" className="max-w-xs">
                             <div className="space-y-2">
-                              <div className="font-semibold text-sm text-gray-800 dark:text-gray-200">
+                              <div className="font-semibold text-sm text-neutral-200 dark:text-neutral-500">
                                 {formatDate(dayData.date)}
                               </div>
                               <div className="text-sm">
@@ -261,12 +270,12 @@ const monthLabels: MonthLabel[] = []
                                 )}
                               </div>
                               {dayData.transactions.length > 0 && (
-                                <div className="text-xs space-y-1 max-h-32 overflow-y-auto border-t pt-2 border-gray-200 dark:border-gray-700">
-                                  <div className="font-medium text-gray-700 dark:text-gray-300">Recent transactions:</div>
+                                <div className="text-xs space-y-1 max-h-32 overflow-y-auto border-t pt-2 border-neutral-600 dark:border-neutral-400 ">
+                                  <div className="font-medium text-neutral-200 dark:text-neutral-500">Recent transactions:</div>
                                   {dayData.transactions.slice(0, 3).map((tx, txIndex) => (
-                                    <div key={txIndex} className="flex justify-between text-gray-600 dark:text-gray-400">
-                                      <span>Block {tx.block_slot.toLocaleString()}</span>
-                                      <span className="text-gray-500 dark:text-gray-500">{formatTime(tx.block_time)}</span>
+                                    <div key={txIndex} className="flex justify-between text-neutral-400 dark:text-neutral-500">
+                                      <span>Block {tx.block_slot.toLocaleString()} &nbsp;</span>
+                                      <span className="text-neutral-400 dark:text-neutral-500">{formatTime(tx.block_time)}</span>
                                     </div>
                                   ))}
                                   {dayData.transactions.length > 3 && (
@@ -297,6 +306,11 @@ const monthLabels: MonthLabel[] = []
       color: "text-purple-600 dark:text-purple-400",
     },
     {
+      label: "Total Transactions (1yr)",
+      value: totalYearTransactions.toLocaleString(),
+      color: "text-indigo-600 dark:text-indigo-400",
+    },
+    {
       label: "Active Days",
       value: heatmapData.filter((d) => d.count > 0).length,
       color: "text-emerald-600 dark:text-emerald-400",
@@ -319,15 +333,10 @@ const monthLabels: MonthLabel[] = []
       value: `${totalFeesSOL}`,
       color: "text-pink-600 dark:text-pink-400",
     },
-    {
-      label: "Today's Fees (SOL)",
-      value: `${todayFeesSOL}`,
-      color: "text-pink-500 dark:text-pink-300",
-    },
+     
   ].map((stat, i) => (
-    <div key={i} className="relative">
-      <GlowingEffect glow={true} spread={32} disabled={false} blur={8} />
     <div
+    key={i}
       className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 text-center"
     >
       <div className={`text-2xl font-bold ${stat.color}`}>
@@ -336,7 +345,6 @@ const monthLabels: MonthLabel[] = []
       <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">
         {stat.label}
       </div>
-    </div>
     </div>
   ))}
 </div>
