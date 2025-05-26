@@ -15,7 +15,7 @@ export default function Navbar() {
           {/* <div>
             <Image src="/SolCommitLogo.png" alt="SolCommit" width="70" height="70" />
           </div> */}
-          <div className="p-2 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl shadow-lg">
+          <div className="p-2  bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl shadow-lg">
                 <Activity className="h-8 w-8 text-white" />
           </div>
           <div className="flex items-center space-x-4">

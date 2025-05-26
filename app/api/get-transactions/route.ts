@@ -9,12 +9,13 @@ export const GET = async (req: Request) => {
       return new Response(JSON.stringify({ error: 'Missing wallet address' }), { status: 400 });
     }
 
+    const simKey: string = process.env.SIM_API_KEY as string;
     const url = `https://api.sim.dune.com/beta/svm/transactions/${walletAddress}?limit=100000`;
 
     const options = {
       method: 'GET',
       headers: {
-        'X-Sim-Api-Key': 'sim_fGK2YWtqrWQZwTiRg81PUNGvuMuZ8kKQ',
+        'X-Sim-Api-Key': simKey,
       },
     };
 
