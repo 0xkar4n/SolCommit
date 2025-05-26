@@ -7,7 +7,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { GlowingEffect } from "@/components/ui/glowing-effect";
 
 
 interface Transaction {

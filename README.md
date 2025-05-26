@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/6d8340c9-96c8-439c-b524-6bb105993f6c" alt="SolCommit Logo" width="120">
+</p>
 
-## Getting Started
+ SolCommit is a web application that provides a unique visualization of your Solana transaction history. By simply entering your Solana wallet address, you can generate a transaction heatmap and gain valuable insights into your on-chain activity.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ What You Can See
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+SolCommit transforms raw Solana transaction data into an easily digestible visual and statistical summary. Here's what you can explore:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Solana Transaction Heatmap
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Get a clear, color-coded overview of your transaction activity over time. Days with higher transaction volume will appear "hotter" on the calendar, allowing you to quickly identify periods of intense on-chain interaction.
 
-## Learn More
+![image](https://github.com/user-attachments/assets/8cc5a557-207c-4549-9d6e-31c67d9c5814)
+ ### Transaction Summary Data
 
-To learn more about Next.js, take a look at the following resources:
+Beyond the visual, SolCommit provides key metrics to quantify your Solana wallet's activity:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* **Total Transactions:** The grand total of all transactions associated with your wallet address.
+* **Total Transactions (1yr):** The number of transactions conducted within the last year, giving you a recent activity snapshot.
+* **Active Days (1yr):** The count of unique days within the last year where your wallet had at least one transaction, indicating your consistent engagement.
+* **Busiest Day:** Highlights the single day with the highest number of transactions, revealing peak activity periods.
+* **Total Fees (SOL):** The cumulative amount of Solana (SOL) spent on transaction fees from your wallet.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+![image](https://github.com/user-attachments/assets/e3c73f3d-a5bd-4e71-b0a5-10a3e4a7fd91)
+ ---
 
-## Deploy on Vercel
+## 🛠️ How It Works
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+SolCommit leverages **Sim**, a real-time multichain developer platform powered by Dune. Sim is designed to power the next generation of onchain apps by providing real-time, multichain data in one platform. When you input your Solana wallet address:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1.  Your request is sent to the SolCommit backend.
+2.  The backend queries **Sim** (https://sim.dune.com/), utilizing its powerful APIs to retrieve all relevant Solana transaction information for your provided address.
+3.  Sim's robust infrastructure, built on Dune's extensive data analytics, processes and aggregates this vast amount of on-chain data with sub-second latency.
+4.  The processed data is then sent back to SolCommit, which visualizes it as a heatmap and calculates the summary statistics presented on the frontend.
+
+This seamless integration with Sim ensures that you receive accurate, up-to-date, and comprehensive insights into your Solana transaction history.
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! If you have ideas for new features, bug fixes, or improvements, please feel free to:
+
+1.  Fork the repository.
+2.  Create a new branch (`git checkout -b feature/your-feature-name`).
+3.  Make your changes.
+4.  Commit your changes (`git commit -m 'Add new feature'`).
+5.  Push to the branch (`git push origin feature/your-feature-name`).
+6.  Open a pull request.
+
+---
+
+## 📝 License
+
+This project is licensed under the [MIT License](LICENSE).
